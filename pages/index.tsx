@@ -1,12 +1,18 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
+import { getFeaturedRecipes } from '../src/lib/contentful';
+import { renderRichText } from '../src/lib/richTextRenderer';
 
 const LanguageSwitcher = dynamic(() => import('../src/components/LanguageSwitcher'), { 
   ssr: false 
 });
 
-export default function Home() {
+interface HomeProps {
+  featuredRecipes: any[];
+}
+
+export default function Home({ featuredRecipes }: HomeProps) {
   const { t } = useTranslation('common');
 
   return (
@@ -23,6 +29,37 @@ export default function Home() {
             placeholder={t('search_placeholder')}
             className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
+        </div>
+        
+        <div data-testid="featured-recipes" className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Featured Recipes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredRecipes.map((recipe: any) => (
+              <div key={recipe.sys.id} data-testid="recipe-card" className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                {recipe.fields.featuredImage && (
+                  <div className="h-48 overflow-hidden">
+                    <img 
+                      src={`https:${recipe.fields.featuredImage.fields.file.url}`} 
+                      alt={recipe.fields.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{recipe.fields.title}</h3>
+                  <div className="text-gray-600 mb-4 line-clamp-3">
+                    {renderRichText(recipe.fields.description)}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">⏱️ {recipe.fields.cookingTime} min</span>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                      {recipe.fields.difficulty}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -65,10 +102,14 @@ export default function Home() {
   );
 }
 
-export async function getServerSideProps({ locale }: { locale: string }) {
+export async function getStaticProps({ locale }: { locale: string }) {
+  const featuredRecipes = await getFeaturedRecipes(locale, 3);
+  
   return {
     props: {
+      featuredRecipes,
       ...(await serverSideTranslations(locale, ['common'])),
     },
+    revalidate: 60, // Revalidate at most once every 60 seconds
   };
 }
