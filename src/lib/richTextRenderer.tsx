@@ -1,12 +1,13 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
+import { ReactNode } from 'react';
 
 // Custom options for rendering rich text
 const richTextOptions = {
   renderMark: {
-    [MARKS.BOLD]: (text: any) => <strong className="font-semibold">{text}</strong>,
-    [MARKS.ITALIC]: (text: any) => <em className="italic">{text}</em>,
-    [MARKS.UNDERLINE]: (text: any) => <u>{text}</u>,
+    [MARKS.BOLD]: (text: ReactNode) => <strong className="font-semibold">{text}</strong>,
+    [MARKS.ITALIC]: (text: ReactNode) => <em className="italic">{text}</em>,
+    [MARKS.UNDERLINE]: (text: ReactNode) => <u>{text}</u>,
   },
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node: any, next: any) => <p className="mb-4">{next(node.content)}</p>,
