@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getRecipeBySlug, getAllSlugs, Recipe } from '../../src/lib/contentful';
 import { renderRichText } from '../../src/lib/richTextRenderer';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 const LanguageSwitcher = dynamic(() => import('../../src/components/LanguageSwitcher'), { 
   ssr: false 
@@ -44,11 +45,14 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* Recipe Header */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           {recipe.fields.featuredImage && (
-            <div className="h-96 overflow-hidden">
-              <img 
+            <div className="h-96 relative">
+              <Image 
                 src={`https:${recipe.fields.featuredImage.fields.file.url}`}
                 alt={recipe.fields.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+                priority
               />
             </div>
           )}

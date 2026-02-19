@@ -1,6 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { getFeaturedRecipes } from '../src/lib/contentful';
 import { renderRichText } from '../src/lib/richTextRenderer';
 
@@ -37,11 +38,13 @@ export default function Home({ featuredRecipes }: HomeProps) {
             {featuredRecipes.map((recipe: any) => (
               <div key={recipe.sys.id} data-testid="recipe-card" className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 {recipe.fields.featuredImage && (
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={`https:${recipe.fields.featuredImage.fields.file.url}`} 
+                  <div className="h-48 relative">
+                    <Image 
+                      src={`https:${recipe.fields.featuredImage.fields.file.url}`}
                       alt={recipe.fields.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 )}
