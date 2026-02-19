@@ -1,20 +1,6 @@
 {
-  "welcome": "Bienvenue sur le Blog de Recettes",
-  "description": "Découvrez des recettes délicieuses du monde entier",
-  "navigation": {
-    "home": "Accueil",
-    "recipes": "Recettes",
-    "about": "À propos",
-    "contact": "Contact"
-  },
-  "recipe": {
-    "ingredients": "Ingrédients",
-    "instructions": "Instructions",
-    "prep_time": "Temps de préparation",
-    "cook_time": "Temps de cuisson",
-    "servings": "Portions"
-  },
-  "footer": {
-    "copyright": "© 2026 Blog de Recettes. Tous droits réservés."
-  }
+  "search_placeholder": "Rechercher des recettes...",
+  "ingredients": "Ingrédients",
+  "instructions": "Instructions",
+  "newsletter_title": "Abonnez-vous à notre newsletter"
 }
