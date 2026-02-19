@@ -1,0 +1,20 @@
+{
+  "welcome": "Welcome to Recipe Blog",
+  "description": "Discover delicious recipes from around the world",
+  "navigation": {
+    "home": "Home",
+    "recipes": "Recipes",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "recipe": {
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "prep_time": "Prep Time",
+    "cook_time": "Cook Time",
+    "servings": "Servings"
+  },
+  "footer": {
+    "copyright": "© 2026 Recipe Blog. All rights reserved."
+  }
+}

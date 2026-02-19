@@ -1,0 +1,20 @@
+{
+  "welcome": "Willkommen im Rezept-Blog",
+  "description": "Entdecken Sie köstliche Rezepte aus aller Welt",
+  "navigation": {
+    "home": "Startseite",
+    "recipes": "Rezepte",
+    "about": "Über uns",
+    "contact": "Kontakt"
+  },
+  "recipe": {
+    "ingredients": "Zutaten",
+    "instructions": "Anleitung",
+    "prep_time": "Vorbereitungszeit",
+    "cook_time": "Kochzeit",
+    "servings": "Portionen"
+  },
+  "footer": {
+    "copyright": "© 2026 Rezept-Blog. Alle Rechte vorbehalten."
+  }
+}
