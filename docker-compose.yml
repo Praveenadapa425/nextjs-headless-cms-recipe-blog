@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  recipe-blog:
+    build: .
+    ports:
+      - "${DOCKER_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    env_file:
+      - .env.local
+    volumes:
+      - ./public/locales:/app/public/locales
+    restart: unless-stopped
+    networks:
+      - recipe-network
+
+networks:
+  recipe-network:
+    driver: bridge
