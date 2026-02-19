@@ -1,6 +1,10 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import LanguageSwitcher from '../src/components/LanguageSwitcher';
+import dynamic from 'next/dynamic';
+
+const LanguageSwitcher = dynamic(() => import('../src/components/LanguageSwitcher'), { 
+  ssr: false 
+});
 
 export default function Home() {
   const { t } = useTranslation('common');

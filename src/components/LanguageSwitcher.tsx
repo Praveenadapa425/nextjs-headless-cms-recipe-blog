@@ -1,14 +1,30 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { useEffect, useState } from 'react';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
   const { i18n } = useTranslation();
   const { pathname, asPath, query } = router;
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const changeLanguage = (locale: string) => {
     router.push({ pathname, query }, asPath, { locale });
   };
+
+  if (!isClient) {
+    return (
+      <div data-testid="language-switcher" className="opacity-0">
+        <select className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm">
+          <option>English</option>
+        </select>
+      </div>
+    );
+  }
 
   return (
     <div data-testid="language-switcher">
