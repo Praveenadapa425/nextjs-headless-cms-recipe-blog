@@ -33,3 +33,11 @@ body {
     overflow: hidden;
   }
 }
+
+@media print {
+  header,
+  footer,
+  [data-testid="comments-list"] {
+    display: none;
+  }
+}
