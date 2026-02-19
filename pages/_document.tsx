@@ -1,8 +1,13 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { DocumentContext } from "next/document";
 
-export default function Document() {
+interface DocumentProps {
+  locale: string;
+}
+
+export default function Document({ locale }: DocumentProps) {
   return (
-    <Html lang="en">
+    <Html lang={locale || "en"}>
       <Head />
       <body className="antialiased">
         <Main />
@@ -11,3 +16,13 @@ export default function Document() {
     </Html>
   );
 }
+
+Document.getInitialProps = async (ctx: DocumentContext) => {
+  const initialProps = await ctx.defaultGetInitialProps(ctx);
+  const locale = ctx.locale || "en";
+  
+  return {
+    ...initialProps,
+    locale,
+  };
+};
