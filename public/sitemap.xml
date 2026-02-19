@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://your-recipe-blog.com/</loc>
+    <lastmod>2026-02-19T15:16:34.545Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://your-recipe-blog.com/recipes</loc>
+    <lastmod>2026-02-19T15:16:34.546Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://your-recipe-blog.com/es</loc>
+    <lastmod>2026-02-19T15:16:34.546Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://your-recipe-blog.com/es/recipes</loc>
+    <lastmod>2026-02-19T15:16:34.546Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://your-recipe-blog.com/fr</loc>
+    <lastmod>2026-02-19T15:16:34.546Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://your-recipe-blog.com/fr/recipes</loc>
+    <lastmod>2026-02-19T15:16:34.546Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
