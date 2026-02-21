@@ -5,7 +5,7 @@ import { getRecipeBySlug, getAllSlugs, client } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableTextRenderer';
 import { urlFor } from '../../lib/sanity';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import OptimizedImage from '../../src/components/OptimizedImage';
 import { useRouter } from 'next/router';
 
 const LanguageSwitcher = dynamic(() => import('../../src/components/LanguageSwitcher'), { 
@@ -74,7 +74,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
         <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 border border-gray-100">
           {recipe.featuredImage && (
             <div className="h-96 relative">
-              <Image 
+              <OptimizedImage 
                 src={urlFor(recipe.featuredImage).url()}
                 alt={(recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
                   ? recipe.title[locale] 

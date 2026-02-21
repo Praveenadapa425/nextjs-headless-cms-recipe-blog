@@ -6,7 +6,7 @@ import { getAllRecipes } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableTextRenderer';
 import { urlFor } from '../../lib/sanity';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import OptimizedImage from '../../src/components/OptimizedImage';
 
 const LanguageSwitcher = dynamic(() => import('../../src/components/LanguageSwitcher'), { 
   ssr: false 
@@ -123,7 +123,7 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                 >
                   {recipe.featuredImage && (
                     <div className="h-48 relative">
-                      <Image 
+                      <OptimizedImage 
                         src={urlFor(recipe.featuredImage).url()}
                         alt={recipe.title}
                         fill

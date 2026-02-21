@@ -19,7 +19,20 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
+# Install SSL certificates and networking tools for proper HTTPS handling
+RUN apk add --no-cache \
+    ca-certificates \
+    curl \
+    openssl \
+    && update-ca-certificates
+
+# Configure Node.js for better SSL handling
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+ENV NODE_TLS_REJECT_UNAUTHORIZED=1
+
 ENV NODE_ENV=production
+# Keep image optimization enabled
+ENV NEXT_IMAGE_UNOPTIMIZED=false
 
 # Install only production dependencies
 COPY package.json package-lock.json ./

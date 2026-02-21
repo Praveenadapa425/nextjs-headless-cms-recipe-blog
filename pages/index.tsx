@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import OptimizedImage from '../src/components/OptimizedImage';
 import { getFeaturedRecipes } from '../lib/sanity';
 import { renderPortableText } from '../lib/portableTextRenderer';
 import { urlFor } from '../lib/sanity';
@@ -57,7 +57,7 @@ export default function Home({ featuredRecipes }: HomeProps) {
               >
                 {recipe.featuredImage && (
                   <div className="h-48 relative">
-                    <Image 
+                    <OptimizedImage 
                       src={urlFor(recipe.featuredImage).url()}
                       alt={recipe.title}
                       fill
