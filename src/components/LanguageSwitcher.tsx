@@ -15,7 +15,8 @@ const LanguageSwitcher = () => {
   }, [router.locale]);
 
   const changeLanguage = (locale: string) => {
-    router.push({ pathname, query }, asPath, { locale });
+    // Preserve the current route when changing language
+    router.push(asPath, asPath, { locale });
   };
 
   // Default to English during SSR
