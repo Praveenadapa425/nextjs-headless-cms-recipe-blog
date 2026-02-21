@@ -46,7 +46,7 @@ export default function Home({ featuredRecipes }: HomeProps) {
         </div>
         
         <div data-testid="featured-recipes" className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Featured Recipes</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{t('featured_recipes')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredRecipes.map((recipe: any) => (
               <a 

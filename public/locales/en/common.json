@@ -10,6 +10,9 @@
   "newsletter_description": "Join our newsletter to receive delicious recipes, cooking tips, and exclusive content delivered to your inbox.",
   "email_placeholder": "Enter your email address",
   "no_spam": "No spam, unsubscribe anytime",
+  "subscribing": "Subscribing...",
+  "thank_you_for_subscribing": "Thank you for subscribing!",
+  "receive_updates": "You'll receive our latest recipes and updates.",
   "medium": "Medium",
   "easy": "Easy",
   "hard": "Hard"

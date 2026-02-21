@@ -10,6 +10,9 @@
   "newsletter_description": "Rejoignez notre newsletter pour recevoir des recettes délicieuses.",
   "email_placeholder": "Entrez votre adresse e-mail",
   "no_spam": "Pas de spam, désabonnez-vous à tout moment",
+  "subscribing": "Abonnement...",
+  "thank_you_for_subscribing": "Merci de vous être abonné !",
+  "receive_updates": "Vous recevrez nos dernières recettes et mises à jour.",
   "medium": "Moyen",
   "easy": "Facile",
   "hard": "Difficile"

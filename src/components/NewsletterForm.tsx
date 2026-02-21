@@ -47,8 +47,8 @@ const NewsletterForm = () => {
           <svg className="w-16 h-16 mx-auto mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
           </svg>
-          <h3 className="text-xl font-semibold mb-2">Thank you for subscribing!</h3>
-          <p className="text-green-700">You'll receive our latest recipes and updates.</p>
+          <h3 className="text-xl font-semibold mb-2">{t('thank_you_for_subscribing')}</h3>
+          <p className="text-green-700">{t('receive_updates')}</p>
         </div>
       </div>
     );
@@ -78,7 +78,7 @@ const NewsletterForm = () => {
         disabled={isSubmitting}
         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
       >
-        {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+        {isSubmitting ? t('subscribing') : t('subscribe')}
       </button>
       
       {error && (
