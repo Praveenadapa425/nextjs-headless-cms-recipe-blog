@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { getRecipeBySlug, getAllSlugs, Recipe } from '../../src/lib/contentful';
-import { renderRichText } from '../../src/lib/richTextRenderer';
+import { getRecipeBySlug, getAllSlugs } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableTextRenderer';
+import { urlFor } from '../../lib/sanity';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -12,7 +13,7 @@ const LanguageSwitcher = dynamic(() => import('../../src/components/LanguageSwit
 });
 
 interface RecipeDetailProps {
-  recipe: Recipe;
+  recipe: any;
 }
 
 export default function RecipeDetail({ recipe }: RecipeDetailProps) {
@@ -24,7 +25,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
     if (typeof window !== 'undefined') {
       const currentUrl = window.location.href;
       const encodedUrl = encodeURIComponent(currentUrl);
-      const encodedTitle = encodeURIComponent(recipe.fields.title);
+      const encodedTitle = encodeURIComponent(recipe.title);
       return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
     }
     return '#';
@@ -57,11 +58,11 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Recipe Header */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          {recipe.fields.featuredImage && (
+          {recipe.featuredImage && (
             <div className="h-96 relative">
               <Image 
-                src={`https:${recipe.fields.featuredImage.fields.file.url}`}
-                alt={recipe.fields.title}
+                src={urlFor(recipe.featuredImage).width(1200).url()}
+                alt={recipe.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
@@ -72,19 +73,19 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           
           <div className="p-8">
             <h1 data-testid="recipe-title" className="text-4xl font-bold text-gray-800 mb-4">
-              {recipe.fields.title}
+              {recipe.title}
             </h1>
             
             <div className="flex flex-wrap gap-4 mb-6">
               <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                ⏱️ {recipe.fields.cookingTime} minutes
+                ⏱️ {recipe.cookingTime} minutes
               </span>
               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                {recipe.fields.difficulty}
+                {recipe.difficulty}
               </span>
-              {recipe.fields.category && (
+              {recipe.category && (
                 <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                  {recipe.fields.category.fields.title}
+                  {recipe.category.title}
                 </span>
               )}
               {/* Social Sharing */}
@@ -103,7 +104,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
             </div>
             
             <div className="prose max-w-none text-gray-700">
-              {renderRichText(recipe.fields.description)}
+              {renderPortableText(recipe.description)}
             </div>
           </div>
         </div>
@@ -113,7 +114,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Ingredients</h2>
             <ul data-testid="recipe-ingredients" className="space-y-3">
-              {renderRichText(recipe.fields.ingredients)}
+              {renderPortableText(recipe.ingredients)}
             </ul>
           </div>
 
@@ -121,7 +122,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Instructions</h2>
             <div data-testid="recipe-instructions" className="space-y-4">
-              {renderRichText(recipe.fields.instructions)}
+              {renderPortableText(recipe.instructions)}
             </div>
           </div>
         </div>

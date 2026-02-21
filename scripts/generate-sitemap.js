@@ -1,35 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
-// Contentful configuration
-const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
-const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN;
+// Import Sanity client
+const { client } = require('../lib/sanity');
 
 // Base URL - update this to your production URL
 const BASE_URL = process.env.SITE_URL || 'https://your-recipe-blog.com';
 
 async function fetchAllSlugs() {
   try {
-    const response = await fetch(
-      `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/entries?content_type=recipe&select=fields.slug`,
-      {
-        headers: {
-          'Authorization': `Bearer ${CONTENTFUL_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    
-    const data = await response.json();
-    
-    // Extract unique slugs
-    const slugs = data.items
-      .map(item => item.fields?.slug)
-      .filter(slug => slug !== undefined);
-    
-    return [...new Set(slugs)];
+    const slugs = await client.fetch('*[_type == "recipe"]{ "slug": slug.current }');
+    return slugs.map(item => item.slug).filter(slug => slug !== undefined);
   } catch (error) {
-    console.error('Error fetching slugs from Contentful:', error);
+    console.error('Error fetching slugs from Sanity:', error);
     return [];
   }
 }
@@ -89,7 +72,7 @@ ${xmlUrls}
 
 async function generateSitemap() {
   try {
-    console.log('🔍 Fetching recipe slugs from Contentful...');
+    console.log('🔍 Fetching recipe slugs from Sanity...');
     const slugs = await fetchAllSlugs();
     console.log(`✅ Found ${slugs.length} unique recipe slugs`);
     

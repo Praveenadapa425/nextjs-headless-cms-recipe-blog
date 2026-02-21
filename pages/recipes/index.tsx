@@ -2,8 +2,9 @@ import { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState, useMemo } from 'react';
-import { getAllRecipes } from '../../src/lib/contentful';
-import { renderRichText } from '../../src/lib/richTextRenderer';
+import { getAllRecipes } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableTextRenderer';
+import { urlFor } from '../../lib/sanity';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
@@ -12,28 +13,18 @@ const LanguageSwitcher = dynamic(() => import('../../src/components/LanguageSwit
 });
 
 interface Recipe {
-  sys: {
-    id: string;
+  _id: string;
+  title: string;
+  slug: {
+    current: string;
   };
-  fields: {
+  description: any;
+  featuredImage?: any;
+  category?: {
     title: string;
-    slug: string;
-    description: any;
-    featuredImage?: {
-      fields: {
-        file: {
-          url: string;
-        };
-      };
-    };
-    category?: {
-      fields: {
-        title: string;
-      };
-    };
-    difficulty: string;
-    cookingTime: number;
   };
+  difficulty: string;
+  cookingTime: number;
 }
 
 interface RecipesPageProps {
@@ -49,9 +40,9 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
   // Client-side filtering
   const filteredRecipes = useMemo(() => {
     return recipes.filter(recipe => {
-      const matchesSearch = recipe.fields.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = !selectedCategory || 
-        (recipe.fields.category && recipe.fields.category.fields.title === selectedCategory);
+        (recipe.category && recipe.category.title === selectedCategory);
       
       return matchesSearch && matchesCategory;
     });
@@ -124,14 +115,14 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRecipes.map((recipe) => (
               <div 
-                key={recipe.sys.id} 
+                key={recipe._id} 
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
               >
-                {recipe.fields.featuredImage && (
+                {recipe.featuredImage && (
                   <div className="h-48 relative">
                     <Image 
-                      src={`https:${recipe.fields.featuredImage.fields.file.url}`}
-                      alt={recipe.fields.title}
+                      src={urlFor(recipe.featuredImage).width(800).url()}
+                      alt={recipe.title}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -141,29 +132,29 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                 
                 <div className="p-6">
                   <h2 className="text-xl font-bold text-gray-800 mb-2">
-                    {recipe.fields.title}
+                    {recipe.title}
                   </h2>
                   
                   <div className="text-gray-600 mb-4 line-clamp-3">
-                    {renderRichText(recipe.fields.description)}
+                    {renderPortableText(recipe.description)}
                   </div>
                   
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                      ⏱️ {recipe.fields.cookingTime} min
+                      ⏱️ {recipe.cookingTime} min
                     </span>
                     <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                      {recipe.fields.difficulty}
+                      {recipe.difficulty}
                     </span>
-                    {recipe.fields.category && (
+                    {recipe.category && (
                       <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
-                        {recipe.fields.category.fields.title}
+                        {recipe.category.title}
                       </span>
                     )}
                   </div>
                   
                   <a 
-                    href={`/recipes/${recipe.fields.slug}`}
+                    href={`/recipes/${recipe.slug.current}`}
                     className="inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     View Recipe
@@ -193,14 +184,14 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     const categories = Array.from(
       new Set(
         recipes
-          .map(recipe => recipe.fields.category?.fields?.title)
+          .map(recipe => recipe.category?.title)
           .filter((category): category is string => category !== undefined)
       )
     ).sort();
     
     return {
       props: {
-        recipes: recipes as Recipe[],
+        recipes: recipes,
         categories,
         ...(await serverSideTranslations(locale || 'en', ['common'])),
       },
