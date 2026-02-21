@@ -102,6 +102,8 @@ export async function getAllRecipes(locale: string = 'en'): Promise<any[]> {
 // Get featured recipes for a specific locale
 export async function getFeaturedRecipes(locale: string = 'en', limit: number = 3): Promise<any[]> {
   try {
+    console.log('Fetching featured recipes for locale:', locale);
+    
     // Check if we have a valid project ID
     if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
       console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
@@ -114,7 +116,9 @@ export async function getFeaturedRecipes(locale: string = 'en', limit: number = 
       return [];
     }
     
+    console.log('Executing query:', recipeQueries.getFeaturedRecipes);
     const recipes = await client.fetch(recipeQueries.getFeaturedRecipes)
+    console.log('Raw recipes from Sanity:', recipes);
     
     return recipes.map((recipe: any) => ({
       ...recipe,

@@ -4,7 +4,7 @@ module.exports = {
   reactStrictMode: true,
   i18n,
   images: {
-    domains: ['images.ctfassets.net'],
+    domains: ['cdn.sanity.io'],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },

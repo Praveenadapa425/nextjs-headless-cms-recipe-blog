@@ -107,7 +107,9 @@ export default function Home({ featuredRecipes }: HomeProps) {
 }
 
 export async function getStaticProps({ locale }: { locale: string }) {
+  console.log('Fetching featured recipes for locale:', locale);
   const featuredRecipes = await getFeaturedRecipes(locale, 3);
+  console.log('Fetched recipes:', featuredRecipes);
   
   return {
     props: {
