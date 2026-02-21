@@ -1,12 +1,19 @@
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+
+// Validate project ID format
+if (projectId && !/^[a-z0-9-]+$/.test(projectId)) {
+  console.warn('Invalid Sanity project ID format. Please check your .env.local file.');
+}
+
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: projectId || 'dummy-project-id',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: true,
-  token: process.env.SANITY_API_TOKEN,
+  // token is not required for read-only access to public datasets
 })
 
 const builder = imageUrlBuilder(client)
@@ -64,6 +71,18 @@ export const recipeQueries = {
 // Get all recipes for a specific locale
 export async function getAllRecipes(locale: string = 'en'): Promise<any[]> {
   try {
+    // Check if we have a valid project ID
+    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
+      console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
+      return [];
+    }
+    
+    // Check if dataset is configured
+    if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
+      console.warn('Sanity dataset not configured. Please set NEXT_PUBLIC_SANITY_DATASET in .env.local');
+      return [];
+    }
+    
     const recipes = await client.fetch(recipeQueries.getAllRecipes)
     
     // Handle localization - assuming Sanity structure with localized fields
@@ -83,6 +102,18 @@ export async function getAllRecipes(locale: string = 'en'): Promise<any[]> {
 // Get featured recipes for a specific locale
 export async function getFeaturedRecipes(locale: string = 'en', limit: number = 3): Promise<any[]> {
   try {
+    // Check if we have a valid project ID
+    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
+      console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
+      return [];
+    }
+    
+    // Check if dataset is configured
+    if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
+      console.warn('Sanity dataset not configured. Please set NEXT_PUBLIC_SANITY_DATASET in .env.local');
+      return [];
+    }
+    
     const recipes = await client.fetch(recipeQueries.getFeaturedRecipes)
     
     return recipes.map((recipe: any) => ({
@@ -99,6 +130,18 @@ export async function getFeaturedRecipes(locale: string = 'en', limit: number = 
 // Get a single recipe by slug and locale
 export async function getRecipeBySlug(slug: string, locale: string = 'en'): Promise<any | null> {
   try {
+    // Check if we have a valid project ID
+    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
+      console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
+      return null;
+    }
+    
+    // Check if dataset is configured
+    if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
+      console.warn('Sanity dataset not configured. Please set NEXT_PUBLIC_SANITY_DATASET in .env.local');
+      return null;
+    }
+    
     const recipe = await client.fetch(recipeQueries.getRecipeBySlug(slug))
     
     if (recipe) {
@@ -121,6 +164,18 @@ export async function getRecipeBySlug(slug: string, locale: string = 'en'): Prom
 // Get all unique slugs for static generation
 export async function getAllSlugs(): Promise<string[]> {
   try {
+    // Check if we have a valid project ID
+    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
+      console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
+      return [];
+    }
+    
+    // Check if dataset is configured
+    if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
+      console.warn('Sanity dataset not configured. Please set NEXT_PUBLIC_SANITY_DATASET in .env.local');
+      return [];
+    }
+    
     const slugs = await client.fetch(recipeQueries.getAllSlugs)
     return slugs.map((item: any) => item.slug).filter((slug: string) => slug !== undefined)
   } catch (error) {
