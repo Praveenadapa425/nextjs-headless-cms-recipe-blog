@@ -37,7 +37,12 @@ export default function Home({ featuredRecipes }: HomeProps) {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Featured Recipes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredRecipes.map((recipe: any) => (
-              <div key={recipe._id} data-testid="recipe-card" className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <a 
+                key={recipe._id} 
+                href={`/recipes/${recipe.slug?.current || recipe.slug}`}
+                data-testid="recipe-card" 
+                className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              >
                 {recipe.featuredImage && (
                   <div className="h-48 relative">
                     <Image 
@@ -54,14 +59,17 @@ export default function Home({ featuredRecipes }: HomeProps) {
                   <div className="text-gray-600 mb-4 line-clamp-3">
                     {renderPortableText(recipe.description)}
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-4">
                     <span className="text-sm text-gray-500">⏱️ {recipe.cookingTime} min</span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
                       {recipe.difficulty}
                     </span>
                   </div>
+                  <div className="inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    View Recipe
+                  </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

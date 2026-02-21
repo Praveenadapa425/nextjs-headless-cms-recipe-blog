@@ -38,6 +38,33 @@ const portableTextComponents = {
 }
 
 export function renderPortableText(content: any) {
-  if (!content) return null
-  return <PortableText value={content} components={portableTextComponents} />
+  if (!content) {
+    console.log('No content to render');
+    return null;
+  }
+  
+  console.log('Rendering portable text content:', content);
+  console.log('Content type:', typeof content);
+  
+  // Handle plain text content
+  if (typeof content === 'string') {
+    console.log('Rendering as plain text');
+    return <div className="whitespace-pre-line">{content}</div>;
+  }
+  
+  // Handle localized content objects
+  if (typeof content === 'object' && content !== null && !Array.isArray(content)) {
+    console.log('Content appears to be localized object');
+    return <div>Localized content object - check implementation</div>;
+  }
+  
+  // Handle Portable Text arrays
+  if (Array.isArray(content)) {
+    console.log('Rendering as Portable Text');
+    return <PortableText value={content} components={portableTextComponents} />;
+  }
+  
+  // Fallback for other content types
+  console.log('Unknown content type, rendering as string');
+  return <div>{String(content)}</div>;
 }

@@ -38,7 +38,7 @@ export const recipeQueries = {
     isFeatured
   }`,
   
-  getFeaturedRecipes: `*[_type == "recipe" && isFeatured == true][0...3]{
+  getFeaturedRecipes: `*[_type == "recipe"][0...3]{
     _id,
     title,
     slug,
@@ -46,7 +46,8 @@ export const recipeQueries = {
     featuredImage,
     category,
     difficulty,
-    cookingTime
+    cookingTime,
+    isFeatured
   }`,
   
   getRecipeBySlug: (slug: string) => `*[_type == "recipe" && slug.current == "${slug}"][0]{
@@ -122,8 +123,8 @@ export async function getFeaturedRecipes(locale: string = 'en', limit: number = 
     
     return recipes.map((recipe: any) => ({
       ...recipe,
-      title: recipe.title?.[locale] || recipe.title,
-      description: recipe.description?.[locale] || recipe.description,
+      title: recipe.title?.[locale] || recipe.title?.en || recipe.title,
+      description: recipe.description?.[locale] || recipe.description?.en || recipe.description,
     })).slice(0, limit)
   } catch (error) {
     console.error('Error fetching featured recipes:', error)
@@ -134,6 +135,8 @@ export async function getFeaturedRecipes(locale: string = 'en', limit: number = 
 // Get a single recipe by slug and locale
 export async function getRecipeBySlug(slug: string, locale: string = 'en'): Promise<any | null> {
   try {
+    console.log('Fetching recipe by slug:', slug, 'locale:', locale);
+    
     // Check if we have a valid project ID
     if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
       console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
@@ -146,7 +149,10 @@ export async function getRecipeBySlug(slug: string, locale: string = 'en'): Prom
       return null;
     }
     
-    const recipe = await client.fetch(recipeQueries.getRecipeBySlug(slug))
+    const query = recipeQueries.getRecipeBySlug(slug);
+    console.log('Executing recipe query:', query);
+    const recipe = await client.fetch(query)
+    console.log('Raw recipe from Sanity:', recipe);
     
     if (recipe) {
       return {
@@ -168,6 +174,8 @@ export async function getRecipeBySlug(slug: string, locale: string = 'en'): Prom
 // Get all unique slugs for static generation
 export async function getAllSlugs(): Promise<string[]> {
   try {
+    console.log('Fetching all slugs from Sanity');
+    
     // Check if we have a valid project ID
     if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_sanity_project_id') {
       console.warn('Sanity project ID not configured. Please set NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local');
@@ -180,8 +188,12 @@ export async function getAllSlugs(): Promise<string[]> {
       return [];
     }
     
+    console.log('Executing slug query:', recipeQueries.getAllSlugs);
     const slugs = await client.fetch(recipeQueries.getAllSlugs)
-    return slugs.map((item: any) => item.slug).filter((slug: string) => slug !== undefined)
+    console.log('Raw slugs from Sanity:', slugs);
+    const processedSlugs = slugs.map((item: any) => item.slug).filter((slug: string) => slug !== undefined);
+    console.log('Processed slugs:', processedSlugs);
+    return processedSlugs
   } catch (error) {
     console.error('Error fetching all slugs:', error)
     return []

@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { getRecipeBySlug, getAllSlugs } from '../../lib/sanity';
+import { getRecipeBySlug, getAllSlugs, client } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableTextRenderer';
 import { urlFor } from '../../lib/sanity';
 import dynamic from 'next/dynamic';
@@ -19,18 +19,29 @@ interface RecipeDetailProps {
 export default function RecipeDetail({ recipe }: RecipeDetailProps) {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const { locale } = router;
   
   // Generate Twitter share URL
   const generateTwitterShareUrl = () => {
     if (typeof window !== 'undefined') {
       const currentUrl = window.location.href;
       const encodedUrl = encodeURIComponent(currentUrl);
-      const encodedTitle = encodeURIComponent(recipe.title);
+      const recipeTitle = (recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
+        ? recipe.title[locale] 
+        : recipe.title;
+      const encodedTitle = encodeURIComponent(recipeTitle);
       return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
     }
     return '#';
   };
 
+  console.log('Component received recipe:', recipe);
+  console.log('Component locale:', locale);
+  console.log('Recipe title in component:', recipe.title);
+  console.log('Recipe description in component:', recipe.description);
+  console.log('Recipe ingredients in component:', recipe.ingredients);
+  console.log('Recipe instructions in component:', recipe.instructions);
+  
   if (!recipe) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -62,7 +73,9 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
             <div className="h-96 relative">
               <Image 
                 src={urlFor(recipe.featuredImage).width(1200).url()}
-                alt={recipe.title}
+                alt={(recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
+                  ? recipe.title[locale] 
+                  : recipe.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
@@ -73,7 +86,9 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           
           <div className="p-8">
             <h1 data-testid="recipe-title" className="text-4xl font-bold text-gray-800 mb-4">
-              {recipe.title}
+              {(recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
+                ? recipe.title[locale] 
+                : recipe.title}
             </h1>
             
             <div className="flex flex-wrap gap-4 mb-6">
@@ -104,7 +119,11 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
             </div>
             
             <div className="prose max-w-none text-gray-700">
-              {renderPortableText(recipe.description)}
+              {renderPortableText(
+                (recipe.description && typeof recipe.description === 'object' && locale && locale in recipe.description) 
+                  ? recipe.description[locale] 
+                  : recipe.description
+              )}
             </div>
           </div>
         </div>
@@ -114,7 +133,11 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Ingredients</h2>
             <ul data-testid="recipe-ingredients" className="space-y-3">
-              {renderPortableText(recipe.ingredients)}
+              {renderPortableText(
+                (recipe.ingredients && typeof recipe.ingredients === 'object' && locale && locale in recipe.ingredients) 
+                  ? recipe.ingredients[locale] 
+                  : recipe.ingredients
+              )}
             </ul>
           </div>
 
@@ -122,7 +145,11 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Instructions</h2>
             <div data-testid="recipe-instructions" className="space-y-4">
-              {renderPortableText(recipe.instructions)}
+              {renderPortableText(
+                (recipe.instructions && typeof recipe.instructions === 'object' && locale && locale in recipe.instructions) 
+                  ? recipe.instructions[locale] 
+                  : recipe.instructions
+              )}
             </div>
           </div>
         </div>
@@ -133,20 +160,31 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const slugs = await getAllSlugs();
+    // Direct Sanity query for slugs
+    const slugs = await client.fetch(`
+      *[_type == "recipe"]{
+        "slug": slug.current
+      }
+    `);
+    
+    console.log('Available slugs from Sanity:', slugs);
     
     // Generate paths for each supported locale
     const locales = ['en', 'es', 'fr'];
     const paths: { params: { slug: string }; locale?: string }[] = [];
     
-    slugs.forEach((slug) => {
-      locales.forEach((locale) => {
-        paths.push({
-          params: { slug },
-          locale,
+    slugs.forEach((item: any) => {
+      if (item.slug) {
+        locales.forEach((locale) => {
+          paths.push({
+            params: { slug: item.slug },
+            locale,
+          });
         });
-      });
+      }
     });
+    
+    console.log('Generated paths:', paths);
     
     return {
       paths,
@@ -164,6 +202,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
     const { slug } = params as { slug: string };
+    const currentLocale = locale || 'en';
+    
+    console.log('Fetching recipe with slug:', slug, 'and locale:', currentLocale);
     
     if (!slug) {
       return {
@@ -171,7 +212,30 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       };
     }
     
-    const recipe = await getRecipeBySlug(slug, locale);
+    // Direct Sanity query for recipe
+    const recipe = await client.fetch(
+      `*[_type == "recipe" && slug.current == $slug][0]{
+        _id,
+        title,
+        slug,
+        description,
+        ingredients,
+        instructions,
+        featuredImage,
+        category,
+        difficulty,
+        cookingTime,
+        isFeatured
+      }`,
+      { slug }
+    );
+    
+    console.log('Raw recipe from Sanity:', recipe);
+    console.log('Current locale:', currentLocale);
+    console.log('Recipe title structure:', recipe.title);
+    console.log('Recipe description structure:', recipe.description);
+    console.log('Recipe ingredients structure:', recipe.ingredients);
+    console.log('Recipe instructions structure:', recipe.instructions);
     
     if (!recipe) {
       return {
@@ -179,9 +243,32 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       };
     }
     
+    // Handle localization
+    const localizedRecipe = {
+      ...recipe,
+      title: (recipe.title && typeof recipe.title === 'object' && currentLocale in recipe.title) 
+        ? recipe.title[currentLocale] 
+        : (recipe.title?.en || recipe.title),
+      description: (recipe.description && typeof recipe.description === 'object' && currentLocale in recipe.description) 
+        ? recipe.description[currentLocale] 
+        : (recipe.description?.en || recipe.description),
+      ingredients: (recipe.ingredients && typeof recipe.ingredients === 'object' && currentLocale in recipe.ingredients) 
+        ? recipe.ingredients[currentLocale] 
+        : (recipe.ingredients?.en || recipe.ingredients),
+      instructions: (recipe.instructions && typeof recipe.instructions === 'object' && currentLocale in recipe.instructions) 
+        ? recipe.instructions[currentLocale] 
+        : (recipe.instructions?.en || recipe.instructions),
+    };
+    
+    console.log('Localized recipe:', localizedRecipe);
+    console.log('Localized title:', localizedRecipe.title);
+    console.log('Localized description type:', typeof localizedRecipe.description);
+    console.log('Localized ingredients type:', typeof localizedRecipe.ingredients);
+    console.log('Localized instructions type:', typeof localizedRecipe.instructions);
+    
     return {
       props: {
-        recipe,
+        recipe: localizedRecipe,
         ...(await serverSideTranslations(locale || 'en', ['common'])),
       },
       revalidate: 60, // Revalidate at most once every 60 seconds
