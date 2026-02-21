@@ -4,7 +4,14 @@ module.exports = {
   reactStrictMode: true,
   i18n,
   images: {
-    domains: ['cdn.sanity.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: '/**',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },

@@ -73,7 +73,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           {recipe.featuredImage && (
             <div className="h-96 relative">
               <Image 
-                src={urlFor(recipe.featuredImage).width(1200).url()}
+                src={recipe.featuredImage}
                 alt={(recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
                   ? recipe.title[locale] 
                   : recipe.title}
@@ -161,44 +161,12 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    // Direct Sanity query for slugs
-    const slugs = await client.fetch(`
-      *[_type == "recipe"]{
-        "slug": slug.current
-      }
-    `);
-    
-    console.log('Available slugs from Sanity:', slugs);
-    
-    // Generate paths for each supported locale
-    const locales = ['en', 'es', 'fr'];
-    const paths: { params: { slug: string }; locale?: string }[] = [];
-    
-    slugs.forEach((item: any) => {
-      if (item.slug) {
-        locales.forEach((locale) => {
-          paths.push({
-            params: { slug: item.slug },
-            locale,
-          });
-        });
-      }
-    });
-    
-    console.log('Generated paths:', paths);
-    
-    return {
-      paths,
-      fallback: false,
-    };
-  } catch (error) {
-    console.error('Error generating static paths:', error);
-    return {
-      paths: [],
-      fallback: false,
-    };
-  }
+  console.log('getStaticPaths called');
+  // Return empty paths with blocking fallback to generate pages on-demand
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
