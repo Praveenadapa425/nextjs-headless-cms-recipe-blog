@@ -1,6 +1,16 @@
 {
   "search_placeholder": "Rechercher des recettes...",
+  "featured_recipes": "Recettes en Vedette",
   "ingredients": "Ingrédients",
   "instructions": "Instructions",
-  "newsletter_title": "Abonnez-vous à notre newsletter"
+  "view_recipe": "Voir la recette",
+  "subscribe": "S'abonner",
+  "share": "Partager",
+  "newsletter_title": "Restez informé des nouvelles recettes",
+  "newsletter_description": "Rejoignez notre newsletter pour recevoir des recettes délicieuses.",
+  "email_placeholder": "Entrez votre adresse e-mail",
+  "no_spam": "Pas de spam, désabonnez-vous à tout moment",
+  "medium": "Moyen",
+  "easy": "Facile",
+  "hard": "Difficile"
 }

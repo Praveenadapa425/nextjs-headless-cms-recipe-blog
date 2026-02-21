@@ -1,6 +1,16 @@
 {
   "search_placeholder": "Buscar recetas...",
+  "featured_recipes": "Recetas Destacadas",
   "ingredients": "Ingredientes",
   "instructions": "Instrucciones",
-  "newsletter_title": "Suscríbete a nuestro boletín"
+  "view_recipe": "Ver receta",
+  "subscribe": "Suscribirse",
+  "share": "Compartir",
+  "newsletter_title": "Mantente actualizado con nuevas recetas",
+  "newsletter_description": "Únete a nuestro boletín para recibir recetas deliciosas y consejos de cocina.",
+  "email_placeholder": "Ingrese su dirección de correo electrónico",
+  "no_spam": "Sin spam, cancele su suscripción en cualquier momento",
+  "medium": "Intermedio",
+  "easy": "Fácil",
+  "hard": "Difícil"
 }

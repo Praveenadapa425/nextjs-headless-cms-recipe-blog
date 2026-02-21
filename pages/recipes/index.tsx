@@ -40,8 +40,8 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
   // Client-side filtering
   const filteredRecipes = useMemo(() => {
     return recipes.filter(recipe => {
-      const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = !selectedCategory || 
+      const matchesSearch = searchTerm === '' || recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === '' || 
         (recipe.category && recipe.category.title === selectedCategory);
       
       return matchesSearch && matchesCategory;
@@ -49,24 +49,24 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
   }, [recipes, searchTerm, selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-800">All Recipes</h1>
-            <LanguageSwitcher />
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <header className="bg-white shadow-lg rounded-lg mb-8">
+          <div className="px-6 py-6">
+            <div className="flex justify-between items-center">
+              <h1 className="text-3xl font-bold text-gray-900">All Recipes</h1>
+              <LanguageSwitcher />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Search and Filter Section */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+      <div className="bg-white rounded-xl shadow-md p-8 mb-8 border border-gray-100">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Search Input */}
             <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="search" className="block text-sm font-medium text-gray-800 mb-2">
                 Search Recipes
               </label>
               <input
@@ -82,7 +82,7 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
 
             {/* Category Filter */}
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-gray-800 mb-2">
                 Filter by Category
               </label>
               <select
@@ -105,7 +105,7 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
 
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-gray-600">
+          <p className="text-gray-700">
             Showing {filteredRecipes.length} of {recipes.length} recipes
           </p>
         </div>
@@ -114,9 +114,10 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
         {filteredRecipes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRecipes.map((recipe) => (
-              <div 
+              <a 
                 key={recipe._id} 
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                href={`/recipes/${recipe.slug?.current || recipe.slug}`}
+                className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow border border-gray-100"
               >
                 {recipe.featuredImage && (
                   <div className="h-48 relative">
@@ -131,11 +132,11 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                 )}
                 
                 <div className="p-6">
-                  <h2 className="text-xl font-bold text-gray-800 mb-2">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">
                     {recipe.title}
                   </h2>
                   
-                  <div className="text-gray-600 mb-4 line-clamp-3">
+                  <div className="text-gray-700 mb-4 line-clamp-3">
                     {renderPortableText(recipe.description)}
                   </div>
                   
@@ -144,7 +145,7 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                       ⏱️ {recipe.cookingTime} min
                     </span>
                     <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                      {recipe.difficulty}
+                      {t(recipe.difficulty?.toLowerCase() || 'medium')}
                     </span>
                     {recipe.category && (
                       <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
@@ -157,22 +158,23 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                     href={`/recipes/${recipe.slug?.current || recipe.slug}`}
                     className="inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    View Recipe
+                    {t('view_recipe')}
                   </a>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No recipes found</h3>
-            <p className="text-gray-600">
+          <div className="bg-white rounded-xl shadow-md p-12 text-center border border-gray-100">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No recipes found</h3>
+            <p className="text-gray-700">
               Try adjusting your search or filter criteria
             </p>
           </div>
         )}
       </div>
     </div>
+  </div>
   );
 }
 

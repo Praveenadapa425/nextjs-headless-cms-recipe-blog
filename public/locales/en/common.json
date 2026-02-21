@@ -1,6 +1,16 @@
 {
   "search_placeholder": "Search recipes...",
+  "featured_recipes": "Featured Recipes",
   "ingredients": "Ingredients",
   "instructions": "Instructions",
-  "newsletter_title": "Subscribe to our newsletter"
+  "view_recipe": "View Recipe",
+  "subscribe": "Subscribe",
+  "share": "Share",
+  "newsletter_title": "Stay Updated with New Recipes",
+  "newsletter_description": "Join our newsletter to receive delicious recipes, cooking tips, and exclusive content delivered to your inbox.",
+  "email_placeholder": "Enter your email address",
+  "no_spam": "No spam, unsubscribe anytime",
+  "medium": "Medium",
+  "easy": "Easy",
+  "hard": "Hard"
 }

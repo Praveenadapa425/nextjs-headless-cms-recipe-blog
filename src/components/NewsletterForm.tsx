@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 
 const NewsletterForm = () => {
+  const { t } = useTranslation('common');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -64,7 +66,7 @@ const NewsletterForm = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email address"
+          placeholder={t("email_placeholder")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           disabled={isSubmitting}
         />

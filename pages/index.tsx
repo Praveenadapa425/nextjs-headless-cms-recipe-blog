@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { getFeaturedRecipes } from '../lib/sanity';
 import { renderPortableText } from '../lib/portableTextRenderer';
 import { urlFor } from '../lib/sanity';
+import NewsletterForm from '../src/components/NewsletterForm';
 
 const LanguageSwitcher = dynamic(() => import('../src/components/LanguageSwitcher'), { 
   ssr: false 
@@ -18,23 +19,34 @@ export default function Home({ featuredRecipes }: HomeProps) {
   const { t } = useTranslation('common');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="w-full bg-white rounded-xl shadow-lg p-8 border border-gray-100">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Recipe Blog</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Recipe Blog</h1>
           <LanguageSwitcher />
         </div>
         
-        <div className="text-center mb-8">
-          <input 
-            type="text" 
-            placeholder={t('search_placeholder')}
-            className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+        <div className="text-center mb-12">
+          <div className="max-w-md mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('featured_recipes')}</h2>
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder={t('search_placeholder')}
+                className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-800 placeholder-gray-500 shadow-sm"
+              />
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div data-testid="featured-recipes" className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Featured Recipes</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Featured Recipes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredRecipes.map((recipe: any) => (
               <a 
@@ -55,18 +67,18 @@ export default function Home({ featuredRecipes }: HomeProps) {
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{recipe.title}</h3>
-                  <div className="text-gray-600 mb-4 line-clamp-3">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{recipe.title}</h3>
+                  <div className="text-gray-700 mb-4 line-clamp-3">
                     {renderPortableText(recipe.description)}
                   </div>
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-sm text-gray-500">⏱️ {recipe.cookingTime} min</span>
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                      {recipe.difficulty}
+                      {t(recipe.difficulty?.toLowerCase() || 'medium')}
                     </span>
                   </div>
                   <div className="inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    View Recipe
+                    {t('view_recipe')}
                   </div>
                 </div>
               </a>
@@ -74,43 +86,30 @@ export default function Home({ featuredRecipes }: HomeProps) {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">{t('ingredients')}</h2>
-            <ul className="space-y-2 text-gray-600">
-              <li>• Fresh vegetables</li>
-              <li>• Quality proteins</li>
-              <li>• Herbs and spices</li>
-              <li>• Essential pantry items</li>
-            </ul>
-          </div>
-          
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">{t('instructions')}</h2>
-            <ol className="space-y-2 text-gray-600 list-decimal list-inside">
-              <li>Prepare all ingredients</li>
-              <li>Follow step-by-step guide</li>
-              <li>Cook with love</li>
-              <li>Enjoy your creation</li>
-            </ol>
-          </div>
-        </div>
+
         
-        <div className="mt-8 text-center p-6 bg-blue-50 rounded-lg">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">{t('newsletter_title')}</h3>
-          <div className="flex max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-r-lg hover:bg-blue-700 transition-colors">
-              Subscribe
-            </button>
+        <div className="mt-12 text-center p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">{t('newsletter_title')}</h3>
+            <p className="text-gray-600 mb-6 max-w-lg mx-auto">
+              {t('newsletter_description')}
+            </p>
+            <NewsletterForm />
+            <p className="text-sm text-gray-500 mt-2">
+              {t("no_spam")}
+            </p>
           </div>
         </div>
       </div>
     </div>
+  </div>
   );
 }
 
