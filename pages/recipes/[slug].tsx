@@ -23,16 +23,18 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
   
   // Generate Twitter share URL
   const generateTwitterShareUrl = () => {
-    if (typeof window !== 'undefined') {
-      const currentUrl = window.location.href;
-      const encodedUrl = encodeURIComponent(currentUrl);
-      const recipeTitle = (recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
-        ? recipe.title[locale] 
-        : recipe.title;
-      const encodedTitle = encodeURIComponent(recipeTitle);
-      return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
-    }
-    return '#';
+    // Use router.asPath to get the current URL
+    const currentPath = router.asPath;
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://your-recipe-blog.com';
+    const currentUrl = `${baseUrl}${currentPath}`;
+    
+    const encodedUrl = encodeURIComponent(currentUrl);
+    const recipeTitle = (recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
+      ? recipe.title[locale] 
+      : recipe.title;
+    const encodedTitle = encodeURIComponent(recipeTitle || 'Check out this recipe!');
+    
+    return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
   };
 
   console.log('Component received recipe:', recipe);
@@ -73,7 +75,7 @@ export default function RecipeDetail({ recipe }: RecipeDetailProps) {
           {recipe.featuredImage && (
             <div className="h-96 relative">
               <Image 
-                src={recipe.featuredImage}
+                src={urlFor(recipe.featuredImage).url()}
                 alt={(recipe.title && typeof recipe.title === 'object' && locale && locale in recipe.title) 
                   ? recipe.title[locale] 
                   : recipe.title}

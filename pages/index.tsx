@@ -58,7 +58,7 @@ export default function Home({ featuredRecipes }: HomeProps) {
                 {recipe.featuredImage && (
                   <div className="h-48 relative">
                     <Image 
-                      src={recipe.featuredImage}
+                      src={urlFor(recipe.featuredImage).url()}
                       alt={recipe.title}
                       fill
                       className="object-cover"

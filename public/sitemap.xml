@@ -2,92 +2,92 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://your-recipe-blog.com/</loc>
-    <lastmod>2026-02-21T07:46:47.728Z</lastmod>
+    <loc>http://localhost:3002/</loc>
+    <lastmod>2026-02-21T08:55:58.369Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/recipes</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/recipes</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/es</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/es</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/es/recipes</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/es/recipes</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/fr</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/fr</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/fr/recipes</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/fr/recipes</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/recipes/indian-butter-chicken</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/recipes/indian-butter-chicken</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/es/recipes/indian-butter-chicken</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/es/recipes/indian-butter-chicken</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/fr/recipes/indian-butter-chicken</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/fr/recipes/indian-butter-chicken</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/recipes/classic-spanish-paella</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/recipes/classic-spanish-paella</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/es/recipes/classic-spanish-paella</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/es/recipes/classic-spanish-paella</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/fr/recipes/classic-spanish-paella</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/fr/recipes/classic-spanish-paella</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/recipes/italian-pasta-carbonara</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/recipes/italian-pasta-carbonara</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/es/recipes/italian-pasta-carbonara</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/es/recipes/italian-pasta-carbonara</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-recipe-blog.com/fr/recipes/italian-pasta-carbonara</loc>
-    <lastmod>2026-02-21T07:46:47.729Z</lastmod>
+    <loc>http://localhost:3002/fr/recipes/italian-pasta-carbonara</loc>
+    <lastmod>2026-02-21T08:55:58.370Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

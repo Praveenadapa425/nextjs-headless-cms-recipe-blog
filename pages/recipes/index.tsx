@@ -124,7 +124,7 @@ export default function RecipesPage({ recipes, categories }: RecipesPageProps) {
                   {recipe.featuredImage && (
                     <div className="h-48 relative">
                       <Image 
-                        src={urlFor(recipe.featuredImage).width(800).url()}
+                        src={urlFor(recipe.featuredImage).url()}
                         alt={recipe.title}
                         fill
                         className="object-cover"

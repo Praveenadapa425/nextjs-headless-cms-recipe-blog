@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Base URL - update this to your production URL
-const BASE_URL = (process.env.SITE_URL || 'https://your-recipe-blog.com').trim();
+const BASE_URL = (process.env.SITE_URL || 'http://localhost:3002').trim();
 
 function generateSitemapUrls() {
   const locales = ['en', 'es', 'fr'];

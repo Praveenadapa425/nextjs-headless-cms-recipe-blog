@@ -22,6 +22,19 @@ export function urlFor(source: any) {
   return builder.image(source)
 }
 
+// Helper function to convert Sanity image to Next.js compatible format
+export function getSanityImageUrl(source: any, options?: { width?: number; height?: number; quality?: number }) {
+  if (!source) return '';
+  
+  let imgBuilder = builder.image(source);
+  
+  if (options?.width) imgBuilder = imgBuilder.width(options.width);
+  if (options?.height) imgBuilder = imgBuilder.height(options?.height);
+  if (options?.quality) imgBuilder = imgBuilder.quality(options.quality);
+  
+  return imgBuilder.auto('format').url();
+}
+
 // GROQ queries for recipes
 export const recipeQueries = {
   getAllRecipes: `*[_type == "recipe"]{

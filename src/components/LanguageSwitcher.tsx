@@ -7,30 +7,28 @@ const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
   const { pathname, asPath, query } = router;
   const [isClient, setIsClient] = useState(false);
+  const [currentLocale, setCurrentLocale] = useState(router.locale || 'en');
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    setCurrentLocale(router.locale || 'en');
+  }, [router.locale]);
 
   const changeLanguage = (locale: string) => {
     router.push({ pathname, query }, asPath, { locale });
   };
 
-  if (!isClient) {
-    return (
-      <div data-testid="language-switcher" className="opacity-0">
-        <select className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800">
-          <option>English</option>
-        </select>
-      </div>
-    );
-  }
+  // Default to English during SSR
+  const localeToDisplay = isClient ? currentLocale : 'en';
 
   return (
     <div data-testid="language-switcher" className="relative">
       <select 
-        value={i18n.language} 
-        onChange={(e) => changeLanguage(e.target.value)}
+        value={localeToDisplay}
+        onChange={(e) => {
+          setCurrentLocale(e.target.value);
+          changeLanguage(e.target.value);
+        }}
         className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
       >
         <option value="en">English</option>
