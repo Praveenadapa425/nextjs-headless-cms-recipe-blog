@@ -10,11 +10,10 @@
     "postbuild": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
-    "@contentful/rich-text-react-renderer": "^16.1.6",
-    "@contentful/rich-text-types": "^17.2.5",
+    "@portabletext/react": "^3.0.0",
+    "@sanity/client": "^6.1.0",
+    "@sanity/image-url": "^1.0.0",
     "@tailwindcss/typography": "^0.5.19",
-    "axios": "^1.13.5",
-    "contentful": "^11.10.4",
     "i18next": "^25.8.11",
     "next": "16.1.6",
     "next-i18next": "^15.4.3",
